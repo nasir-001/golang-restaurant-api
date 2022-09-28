@@ -8,7 +8,6 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"mongodb.org/mongo-driver/mongo"
 )
 
 func DBinstance() *mongo.Client {
