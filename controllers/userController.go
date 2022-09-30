@@ -21,7 +21,7 @@ func SignUp() gin.HandlerFunc {
 }
 
 func Login() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
+	return func(c *gin.Context) {
 
 	}
 }
