@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"golang-restuarant-management/database"
+	"golang-restuarant-management/models"
 	"net/http"
-	"runtime/msan"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"golang.org/x/text/number"
 )
 
 var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
@@ -33,7 +32,7 @@ func GetFood() gin.HandlerFunc {
 
 		err := foodCollection.FindOne(ctx, bson.M{"food_id": foodId}).Decode(&food)
 		defer cancel()
-		if err := nil {
+		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occured while fetching the food item"})
 		}
 		c.JSON(http.StatusOK, food)
@@ -51,11 +50,11 @@ func CreateFood() gin.HandlerFunc {
 			return
 		}
 
-		validationErr := validate.Struct(food)	
+		validationErr := validate.Struct(food)
 		if validationErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
 			return
-		}	
+		}
 		err := menuCollection.FindOne(ctx, bson.M{"menu_id": food.Menu_id}).Decode(&menu)
 
 		defer cancle()
@@ -75,7 +74,7 @@ func CreateFood() gin.HandlerFunc {
 		result, insertErr := foodCollection.InsertOne(ctx, food)
 		if insertErr != nil {
 			msg = fmt.Printf("food item was not created")
-			c.JSON(http.StatusInternalServerError, gin.H("error": msg))
+			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
 
@@ -94,6 +93,6 @@ func round(num float64) int {
 
 }
 
-func toFixed(num float64, precision, int) float64 {
+func toFixed(num float64, precision int) float64 {
 
 }
