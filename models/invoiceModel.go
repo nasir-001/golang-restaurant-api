@@ -14,5 +14,5 @@ type Invoice struct {
 	Payment_status   *string            `json:"payment_status" validate:"required,eq=PENDING|eq=PAID"`
 	Payment_due_date time.Time          `json:"payment_due_date"`
 	Created_at       time.Time          `json:"created_at"`
-	Updated_at       time.Time          `json:"update_at"`
+	Updated_at       time.Time          `json:"updated_at"`
 }

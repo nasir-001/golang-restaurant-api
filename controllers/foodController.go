@@ -41,7 +41,7 @@ func GetFood() gin.HandlerFunc {
 
 func CreateFood() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var ctx, cancle = context.WithTimeout(context.Background(), 100*time.Second)
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		var menu models.Menu
 		var food models.Food
 
@@ -51,20 +51,22 @@ func CreateFood() gin.HandlerFunc {
 		}
 
 		validationErr := validate.Struct(food)
+
 		if validationErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
 			return
 		}
+
 		err := menuCollection.FindOne(ctx, bson.M{"menu_id": food.Menu_id}).Decode(&menu)
 
-		defer cancle()
+		defer cancel()
 
 		if err != nil {
 			msg := fmt.Printf("menu was not found")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 		}
 
-		food.Create_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		food.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		food.ID = primitive.NewObjectID()
 		food.Food_id = food.ID.Hex()
@@ -73,7 +75,7 @@ func CreateFood() gin.HandlerFunc {
 
 		result, insertErr := foodCollection.InsertOne(ctx, food)
 		if insertErr != nil {
-			msg = fmt.Printf("food item was not created")
+			msg := fmt.Printf("food item was not created")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
