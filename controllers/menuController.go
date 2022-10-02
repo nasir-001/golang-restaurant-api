@@ -107,6 +107,7 @@ func UpdateMenu() gin.HandlerFunc {
 				msg := "kindly retype the time"
 				c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 				defer cancel()
+
 				return
 			}
 
