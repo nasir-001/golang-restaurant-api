@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"golang-restuarant-management/database"
 	"golang-restuarant-management/models"
 	"log"
@@ -76,8 +75,8 @@ func CreateMenu() gin.HandlerFunc {
 
 		result, insertErr := menuCollection.InsertOne(ctx, menu)
 		if insertErr != nil {
-			msg := fmt.Printf("Menu item was not created")
-			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+			// msg := fmt.Printf("Menu item was not created")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Menu item was not created"})
 			return
 		}
 
